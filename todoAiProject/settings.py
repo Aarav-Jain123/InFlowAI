@@ -146,7 +146,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'teampistils1234@gmail.com'
+EMAIL_HOST_USER = 'jainaarav552@gmail.com'
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 SESSION_SAVE_EVERY_REQUEST = True
 
@@ -158,9 +158,12 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'media')
 
 LOGIN_REDIRECT_URL = 'http://127.0.0.1:8000/'
-LOGOUT_REDIRECT_URL = '/login'
+LOGOUT_REDIRECT_URL = 'logout'
 
 # CSRF_COOKIE_HTTPONLY = False 
 # CSRF_COOKIE_NAME = "csrftoken"
 
 CORS_ALLOW_ALL_ORIGINS = True
+
+LOGIN_URL = '/login/'
+LOGOUT_URL = 'log-out'  
