@@ -1,0 +1,12 @@
+langchain_core
+python-dotenv
+langchain_community
+groq
+langchain-groq
+langserve
+sentence_transformers
+django
+django-cors-headers
+djangorestframework
+crispy-bootstrap5
+django-autoslug

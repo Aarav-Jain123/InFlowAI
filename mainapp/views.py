@@ -10,11 +10,14 @@ from django.conf import settings
 from django.contrib import messages
 from django.shortcuts import get_object_or_404
 from .models import *
+from .planner import planner
+
 
 # Create your views here.
 @login_required(login_url='/login')
 def index(request):
-    return render(request, 'index.html')
+    user_todos = InFlowAIProject.objects.filter(user=request.user)
+    return render(request, 'main/index.html', {'user_todos': user_todos})
 
 def signup(request):
     logout(request)
@@ -93,11 +96,11 @@ def otp(request):
         try:
             if otp == request.session['auth_token']:
                 data = request.session['signup_data']
-                user = User.objects.create_user(first_name=data.get('first_name'), username=data.get('email'), email=data.get('email'))
+                user = User.objects.create_user(first_name=data.get('first_name'), last_name=data.get('last_name'), username=data.get('username'), email=data.get('email'))
                 user.set_password(data.get('password1'))
                 user.save()
-                
-                custom_user = UserProfile.objects.create(userr=user, email=data.get('email'), name=data.get('first_name'))
+
+                custom_user = UserProfile.objects.create(userr=user, username=data.get('username'), email=data.get('email'), name=data.get('first_name'))
                 custom_user.save()
                 login(request, user)
                 return redirect('http://127.0.0.1:8000/')
@@ -106,3 +109,22 @@ def otp(request):
         except Exception as e:
             print(e)        
     return render(request, 'registration/otp.html')
+
+
+def todo_ai_form(request):
+    if request.method == "POST":
+        prompt = request.POST.get('prompt')
+        assistant_response = planner(prompt)
+        return render(request, 'main/todo_ai_form.html', {'response': assistant_response})
+    return render(request, 'main/todo_ai_form.html')
+
+
+# def create_project(request):
+#     if request.method == "POST":
+#         project_name = request.POST.get('project_name')
+#         # prompt = request.POST.get('prompt')
+#         new_project = InFlowAIProject.objects.create(user=request.user, project_name=project_name, assistant_prompt=assistant_response)
+#         new_project.save()
+#         messages.success(request, 'Project created successfully!')
+#         return redirect('Index')
+#     return render(request, 'create_project.html')
