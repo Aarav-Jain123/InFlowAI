@@ -1,0 +1,12 @@
+{% extends 'main/base.html' %}
+{% block title %}{{project_name}}{% endblock %}
+{% block content %}
+<div class="container">
+    <h1 style="text-align: center;">{{project_name}}</h1>
+    {% comment %} <p style="margin-top: 10px;">{{code.code_desc}}</p>
+    <p><b>Code:</b></p> {% endcomment %}
+    <div style="background-color: lightgray; border-radius: 5px;">
+    <pre id="snippet">{{prompt}}</pre>
+    </div>
+</div>
+{% endblock %}

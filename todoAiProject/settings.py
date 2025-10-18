@@ -51,6 +51,7 @@ CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -58,10 +59,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'mainapp.middleware.StaffRequiredMiddleware', 
-    'corsheaders.middleware.CorsMiddleware',
-    "django.middleware.common.CommonMiddleware",
+    'mainapp.middleware.StaffRequiredMiddleware',
 ]
+
 
 ROOT_URLCONF = 'todoAiProject.urls'
 
@@ -163,7 +163,6 @@ LOGOUT_REDIRECT_URL = 'logout'
 # CSRF_COOKIE_HTTPONLY = False 
 # CSRF_COOKIE_NAME = "csrftoken"
 
-CORS_ALLOW_ALL_ORIGINS = True
 
 LOGIN_URL = '/login/'
 LOGOUT_URL = 'log-out'  

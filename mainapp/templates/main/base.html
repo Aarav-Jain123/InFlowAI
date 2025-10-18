@@ -31,6 +31,15 @@
     <script src="{% static 'script_.js' %}"></script>
     {% load static %}
     <script src="{% static 'landing_.js' %}"></script>
+    {% load static %}
+    <script src="{% static '/jsFiles/ai-form-formatter.js' %}" type='module'></script>
+    <script type="importmap">
+  {
+    "imports": {
+      "marked": "http://127.0.0.1:8000/static/jsFiles/node_modules/marked/bin/marked.js"
+    }
+  }
+</script>
 </body>
 
 </html>

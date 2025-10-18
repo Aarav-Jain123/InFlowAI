@@ -16,6 +16,14 @@ from .planner import planner
 # Create your views here.
 @login_required(login_url='/login')
 def index(request):
+    if request.method == "POST":
+        project_id = request.POST.get("todo-id")
+        if project_id:
+            project_to_delete = InFlowAIProject.objects.filter(id=project_id).first()
+            if project_to_delete and (project_to_delete.user == request.user):
+                project_to_delete.delete()
+                messages.success(request, 'Project deleted successfully!')
+                return redirect('/')
     user_todos = InFlowAIProject.objects.filter(user=request.user)
     return render(request, 'main/index.html', {'user_todos': user_todos})
 
@@ -111,20 +119,57 @@ def otp(request):
     return render(request, 'registration/otp.html')
 
 
-def todo_ai_form(request):
-    if request.method == "POST":
-        prompt = request.POST.get('prompt')
-        assistant_response = planner(prompt)
-        return render(request, 'main/todo_ai_form.html', {'response': assistant_response})
-    return render(request, 'main/todo_ai_form.html')
+# def todo_ai_form(request):
+#     if request.method == "POST":
+#         prompt = request.POST.get('prompt')
+#         assistant_response = planner(prompt)
+#         return render(request, 'main/todo_ai_form.html', {'response': assistant_response})
+#     return render(request, 'main/todo_ai_form.html')
 
 
-# def create_project(request):
+# def save_project(request):
 #     if request.method == "POST":
 #         project_name = request.POST.get('project_name')
-#         # prompt = request.POST.get('prompt')
-#         new_project = InFlowAIProject.objects.create(user=request.user, project_name=project_name, assistant_prompt=assistant_response)
-#         new_project.save()
-#         messages.success(request, 'Project created successfully!')
-#         return redirect('Index')
-#     return render(request, 'create_project.html')
+#         assistant_prompt = request.POST.get('response')
+#         project_link = request.POST.get('project_link')
+#         project = InFlowAIProject.objects.create(
+#             user=request.user,
+#             project_name=project_name,
+#             assistant_prompt=assistant_prompt,
+#             project_link=project_link
+#         )
+#         project.save()
+#         messages.success(request, 'Project saved successfully!')
+#         return redirect('/')
+#     return redirect('/')
+
+
+@login_required(login_url='/')
+def project_page(request, slug):
+    projects = InFlowAIProject.objects.filter(project_name=slug)
+    project = get_object_or_404(projects, project_link=slug)
+    return render(request, 'main/projectDashboard.html', {'project_name': project.project_name, 'prompt': project.assistant_prompt})
+
+
+def todo_ai_form(request):
+    if request.method == "POST":
+        project_name = request.POST.get("project-name")
+        project_prompt = request.POST.get("project-prompt")
+        action = request.POST.get("action")  # <-- which button was pressed
+        assistant_response = request.POST.get("response")
+
+        if action == "ai":
+            assistant_response = planner(project_prompt)
+            project = InFlowAIProject.objects.create(
+                user=request.user,
+                project_name=project_name,
+                assistant_prompt=assistant_response,
+            )
+            project.save()
+            print(project_prompt, assistant_response)
+            return render(request, 'main/todo_ai_form.html', {'response': assistant_response})
+        elif action == "todo":
+            messages.success(request, 'Project saved successfully!')
+            return redirect('/')
+
+    return render(request, "main/todo_ai_form.html")

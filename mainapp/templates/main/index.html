@@ -14,15 +14,11 @@
             Actions
           </a>
           <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="/company-create-form/">Create new company</a></li>
-            <li><a class="dropdown-item" href="/logoutt/">Logout</a></li>
+            <li><a class="dropdown-item" href="/project-create-form/">Create new company</a></li>
+            <li><a class="dropdown-item" href="/log-out/">Logout</a></li>
           </ul>
         </li>
       </ul>
-      <form class="d-flex" role="search">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
-        <button class="btn btn-outline-success" type="submit">Search</button>
-      </form>
     </div>
   </div>
 </nav>
@@ -35,15 +31,18 @@
     <div class="card-header">
       <strong>{{ user_todo.project_name }}</strong>
     </div>
+      <div>
         <form method="POST">
           {% csrf_token %}
+          <button type="submit" class="btn btn-danger" value="{{user_todo.id}}" name="todo-id" id="todo-id">Delete</button>
           <a
-          href="{% url 'Company dashboard' slug=user_todo.project_link %}"
+          href="{% url 'Project page' slug=user_todo.project_link %}"
           class="btn btn-primary"
         >
           View Dashboard
         </a>
         </form>
+      </div>
       </div>
     </div>
 
@@ -52,7 +51,7 @@
     </div>
   </div>
   {% empty %}
-  <p>No companies setup yet, <a href="project-create-form/"> setup one </a></p>
+  <p>No todos created yet, <a href="project-create-form/"> create one </a></p>
   {% endfor %}
 </section>
 </div>
